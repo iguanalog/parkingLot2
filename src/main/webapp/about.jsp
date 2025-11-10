@@ -4,10 +4,13 @@
 <html>
 <head>
     <title>JSP - Hello World</title>
+
 </head>
 <body>
+
 <t:pageTemplate>
     <h1>About parking lot</h1>
 </t:pageTemplate>
+
 </body>
 </html>
