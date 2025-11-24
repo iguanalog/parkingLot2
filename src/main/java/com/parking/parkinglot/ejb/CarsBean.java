@@ -2,12 +2,14 @@ package com.parking.parkinglot.ejb;
 
 import com.parking.parkinglot.common.CarDto;
 import com.parking.parkinglot.entities.Car;
+import com.parking.parkinglot.entities.User;
 import jakarta.ejb.EJBException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
+import java.util.Collection;
 import java.util.logging.Logger;
 import java.util.List;
 
@@ -29,6 +31,21 @@ public class CarsBean {
         }
     }
 
+    public CarDto findCarById(Long id) {
+        LOG.info("findCarById");
+        try {
+            TypedQuery<Car> typedQuery = entityManager.createQuery("SELECT c FROM Car c WHERE c.id = :id", Car.class);
+            Car car = typedQuery.getSingleResult();
+            return  new CarDto(
+                    car.getOwner().getUsername(),
+                    car.getParkingSpot(),
+                    car.getLicencePlate(),
+                    car.getId());
+        }catch (Exception e) {
+            throw new EJBException(e);
+        }
+    }
+
     public List<CarDto> copyCarsToDto(List<Car> cars) {
         return cars.stream()
                 .map(car -> new CarDto(
@@ -37,5 +54,41 @@ public class CarsBean {
                         car.getLicencePlate(),
                         car.getId()))
                 .toList();
+    }
+    public void createCar (String licensePlate, String parkingSpot, Long userId) {
+        LOG.info("createCar");
+        Car car = new Car();
+        car.setLicencePlate(licensePlate);
+        car.setParkingSpot(parkingSpot);
+        User user = entityManager.find(User.class, userId);
+        user.getCars().add(car);
+        car.setOwner(user);
+
+        entityManager.persist(car);
+    }
+
+    public void updateCar (Long id, String licensePlate, String parkingSpot, Long userId) {
+        LOG.info("updateCar");
+
+        Car car = entityManager.find(Car.class, id);
+        car.setLicencePlate(licensePlate);
+        car.setParkingSpot(parkingSpot);
+
+        User oldUser = entityManager.find(User.class, userId);
+        oldUser.getCars().remove(car);
+
+        User user = entityManager.find(User.class, userId);
+        user.getCars().add(car);
+        car.setOwner(oldUser);
+    }
+
+    public void deleteCarsByIds(Collection<Long> carIds){
+        LOG.info("deleteCarsByIds");
+
+        for(Long carId : carIds){
+            Car car = entityManager.find(Car.class, carId);
+            entityManager.remove(car);
+        }
+
     }
 }
