@@ -15,7 +15,7 @@ public class User {
     private String username;
     @Column(name = "email")
     private String email;
-    @Column(name = "password")
+        @Column(name = "password")
     private String password;
 
     public String getPassword() {

@@ -34,14 +34,19 @@ public class CarsBean {
     public CarDto findCarById(Long id) {
         LOG.info("findCarById");
         try {
-            TypedQuery<Car> typedQuery = entityManager.createQuery("SELECT c FROM Car c WHERE c.id = :id", Car.class);
+            TypedQuery<Car> typedQuery = entityManager.createQuery(
+                    "SELECT c FROM Car c WHERE c.id = :id", Car.class);
+
+            // ← THIS LINE WAS MISSING
+            typedQuery.setParameter("id", id);
+
             Car car = typedQuery.getSingleResult();
-            return  new CarDto(
+            return new CarDto(
                     car.getOwner().getUsername(),
                     car.getParkingSpot(),
                     car.getLicencePlate(),
                     car.getId());
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new EJBException(e);
         }
     }
