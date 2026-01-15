@@ -63,6 +63,8 @@
 
     <input type="hidden" name="car_id" value="${car.id}" />
 
+    <button class="w-100 btn btn-primary btn-lg" type="submit">Save Changes</button>
+
 </form>
 
 <body>

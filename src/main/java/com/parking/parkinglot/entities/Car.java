@@ -20,6 +20,10 @@ public class Car {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
+    // inverse side of the one-to-one relationship; CarPhoto owns the relation
+    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private CarPhoto carPhoto;
+
     public User getOwner() {
         return owner;
     }
@@ -27,7 +31,6 @@ public class Car {
     public void setOwner(User owner) {
         this.owner = owner;
     }
-
 
     public String getParkingSpot() {
         return parkingSpot;
@@ -51,6 +54,14 @@ public class Car {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public CarPhoto getPhoto() {
+        return carPhoto;
+    }
+
+    public void setPhoto(CarPhoto photo) {
+        this.carPhoto = photo;
     }
 
 }

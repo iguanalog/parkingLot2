@@ -10,7 +10,7 @@
 
   <form method="POST" action="${pageContext.request.contextPath}/Users">
     <c:if test="${pageContext.request.isUserInRole('WRITE_USERS')}">
-      <button class="btn btn-danger" type="submit">Delete Users</button>
+      <button class="btn btn-ghost" type="submit">Invoice</button>
     </c:if>
 
     <div class="container text-center mt-3">
@@ -32,4 +32,11 @@
       </c:forEach>
     </div>
   </form>
+  <c:if test="${not empty invoices}">
+    <h2>Invoices</h2>
+    <c:forEach var="username" items="${invoices}" varStatus="status">
+      ${status.index + 1}. ${username}
+      <br/>
+    </c:forEach>
+  </c:if>
 </t:pageTemplate>

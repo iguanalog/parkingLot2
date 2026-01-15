@@ -24,6 +24,10 @@ import java.util.List;
 public class Cars extends HttpServlet {
     @Inject
     CarsBean carsBean;
+
+    // Total number of parking spots in the lot (adjust as needed)
+    private static final int TOTAL_PARKING_SPOTS = 100;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse
             response) throws ServletException, IOException {
@@ -34,7 +38,12 @@ public class Cars extends HttpServlet {
 
         List<CarDto> cars = carsBean.findAllCars();
         request.setAttribute("cars", cars);
-        request.setAttribute("numberOfFreeParkingSpots",10);
+
+        // compute free spots dynamically instead of a hard-coded value
+        int freeSpots = TOTAL_PARKING_SPOTS - (cars == null ? 0 : cars.size());
+        if (freeSpots < 0) freeSpots = 0;
+        request.setAttribute("numberOfFreeParkingSpots", freeSpots);
+
         request.getRequestDispatcher("/WEB-INF/pages/cars.jsp").forward(request,response);
     }
 
