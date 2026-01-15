@@ -4,7 +4,7 @@
 <t:pageTemplate>
     <h1>Create a new user</h1>
 </t:pageTemplate>
-<form class="needs-validation" novalidate method="POST"
+<form class="needs-validation" method="POST"
       action="${pageContext.request.contextPath}/AddUser">
 
     <div class="row">
@@ -56,7 +56,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6 mb-3">
+         <div class="col-md-6 mb-3">
             <label for="user_groups">Groups</label>
             <div id="user_groups">
                 <c:forEach var="user_group" items="${userGroups}" varStatus="status">
@@ -80,6 +80,13 @@
         Save
     </button>
 </form>
+
+
+
+
+
+
+
 
 
 
